@@ -1,34 +1,16 @@
-import * as path from "path";
 import * as webpack from "webpack";
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import "webpack-dev-server";
-const cofing: webpack.Configuration = {
-  mode: "production",
-  entry: path.resolve("./", "src", "index.ts"),
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: "ts-loader",
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  output: {
-    filename: "[name].js",
-    path: path.resolve("./", "build"),
-    clean: true,
-  },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js"],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve("./", "public", "index.html"),
-      filename: "index.html",
-    }),
-    new webpack.ProgressPlugin(),
-  ],
+import { buildWebpackConfig } from "./config/build/buildWebpackCofig";
+import { BuildMode, BuildOptions, BuildPaths } from "./config/types/config";
+import path from "path";
+
+const paths: BuildPaths = {
+  entry: path.resolve(__dirname, "src", "index.ts"),
+  build: path.resolve(__dirname, "build"),
+  html: path.resolve(__dirname, "public", "index.html"),
 };
+const mode: BuildMode = "development";
+
+const cofing: webpack.Configuration = buildWebpackConfig({ paths, mode });
 
 export default cofing;
